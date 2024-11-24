@@ -12,13 +12,21 @@ interface MoviesMapper {
         """
         select movie_id, imdb_id, title, created_at
         from fourthwall_assignment.movies 
+        """
+    )
+    fun getAll(): Collection<Movie>
+
+    @Select(
+        """
+        select movie_id, imdb_id, title, created_at
+        from fourthwall_assignment.movies 
         where movie_id = #{movieId}
         """
     )
-    fun getByMovieId(@Param("movieId") movieId: UUID): MovieDAO?
+    fun getByMovieId(@Param("movieId") movieId: UUID): Movie?
 }
 
-data class MovieDAO(
+data class Movie(
     val movieId: UUID,
     val imdbId: String,
     val title: String,
