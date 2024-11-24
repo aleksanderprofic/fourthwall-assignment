@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  database:
+    image: "postgres:17.2"
+    container_name: "fourthwall_assignment-database"
+    environment:
+      POSTGRES_USER: "fourthwall_assignment"
+      POSTGRES_PASSWORD: "fourthwall_assignment"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - "./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    ports:
+      - "5432:5432"
