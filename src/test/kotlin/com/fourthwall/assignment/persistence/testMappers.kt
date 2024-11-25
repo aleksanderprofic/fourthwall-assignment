@@ -6,6 +6,17 @@ import org.apache.ibatis.annotations.Mapper
 import org.apache.ibatis.annotations.Param
 
 @Mapper
+interface UsersTestMapper {
+    @Insert(
+        """
+        insert into fourthwall_assignment.users (user_id, username, password, role) 
+        values (#{user.userId}, #{user.username}, #{user.password}, #{user.role})
+        """
+    )
+    fun insert(@Param("user") user: User)
+}
+
+@Mapper
 interface MoviesTestMapper {
     @Insert(
         """

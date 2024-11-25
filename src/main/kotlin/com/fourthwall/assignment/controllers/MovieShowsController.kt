@@ -5,6 +5,7 @@ import com.fourthwall.assignment.persistence.MovieShow
 import com.fourthwall.assignment.services.MovieShowsService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,6 +30,7 @@ class MovieShowsController(
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     fun createMovieShow(@RequestBody request: CreateMovieShowRequest): CreateMovieShowResponse {
         // TODO: more validation e.g. if movie actually exists
         val createdMovieShow = movieShowsService.createMovieShow(
@@ -41,6 +43,7 @@ class MovieShowsController(
     }
 
     @PutMapping("/{movieShowId}")
+    @PreAuthorize("hasRole('ADMIN')")
     fun updateMovieShow(
         @PathVariable("movieShowId") movieShowId: UUID,
         @RequestBody request: UpdateMovieShowRequest
