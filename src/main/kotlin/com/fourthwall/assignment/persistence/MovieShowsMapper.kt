@@ -13,9 +13,9 @@ interface MovieShowsMapper {
     @Options(flushCache = Options.FlushCachePolicy.TRUE)
     @Select(
         """
-        insert into fourthwall_assignment.movie_shows (movie_show_id, movie_id, starts_at, price, created_at, last_updated_at) 
-        values (#{movieShow.movieShowId}, #{movieShow.movieId}, #{movieShow.startsAt}, #{movieShow.price}, #{movieShow.createdAt}, #{movieShow.lastUpdatedAt})
-        returning movie_show_id, movie_id, starts_at, price, created_at, last_updated_at
+        insert into fourthwall_assignment.movie_shows (movie_show_id, movie_id, starts_at, price) 
+        values (#{movieShow.movieShowId}, #{movieShow.movieId}, #{movieShow.startsAt}, #{movieShow.price})
+        returning movie_show_id, movie_id, starts_at, price
         """
     )
     fun insert(@Param("movieShow") movieShow: MovieShow): MovieShow
@@ -24,9 +24,9 @@ interface MovieShowsMapper {
     @Select(
         """
         update fourthwall_assignment.movie_shows
-        set movie_id = #{movieId}, starts_at = #{startsAt}, price = #{price}, last_updated_at = now()
+        set movie_id = #{movieId}, starts_at = #{startsAt}, price = #{price}
         where movie_show_id = #{movieShowId}
-        returning movie_show_id, movie_id, starts_at, price, created_at, last_updated_at
+        returning movie_show_id, movie_id, starts_at, price
         """
     )
     fun update(
@@ -34,11 +34,11 @@ interface MovieShowsMapper {
         @Param("movieId") movieId: UUID,
         @Param("startsAt") startsAt: OffsetDateTime,
         @Param("price") price: BigDecimal,
-    ): MovieShow
+    ): MovieShow?
 
     @Select(
         """
-        select movie_show_id, movie_id, starts_at, price, created_at, last_updated_at
+        select movie_show_id, movie_id, starts_at, price
         from fourthwall_assignment.movie_shows
         where movie_id = #{movieId}
         """
@@ -51,6 +51,4 @@ data class MovieShow(
     val movieId: UUID,
     val startsAt: OffsetDateTime,
     val price: BigDecimal,
-    val createdAt: OffsetDateTime,
-    val lastUpdatedAt: OffsetDateTime,
 )

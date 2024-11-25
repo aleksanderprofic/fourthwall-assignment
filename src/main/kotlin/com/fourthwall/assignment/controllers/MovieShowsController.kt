@@ -1,7 +1,10 @@
 package com.fourthwall.assignment.controllers
 
+import com.fourthwall.assignment.exceptions.RecordNotFoundException
 import com.fourthwall.assignment.persistence.MovieShow
 import com.fourthwall.assignment.services.MovieShowsService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,6 +30,7 @@ class MovieShowsController(
 
     @PostMapping
     fun createMovieShow(@RequestBody request: CreateMovieShowRequest): CreateMovieShowResponse {
+        // TODO: more validation e.g. if movie actually exists
         val createdMovieShow = movieShowsService.createMovieShow(
             movieId = request.movieId,
             time = request.startsAt,
@@ -40,9 +44,13 @@ class MovieShowsController(
     fun updateMovieShow(
         @PathVariable("movieShowId") movieShowId: UUID,
         @RequestBody request: UpdateMovieShowRequest
-    ): UpdateMovieShowResponse {
-        val updatedMovieShow =
+    ): Any {
+        val updatedMovieShow = try {
+            // TODO: validation if movie actually exists
             movieShowsService.updateMovieShow(movieShowId, request.movieId, request.startsAt, request.price)
+        } catch (e: RecordNotFoundException) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.message)
+        }
 
         return UpdateMovieShowResponse(
             result = MovieShowDTO(updatedMovieShow)
