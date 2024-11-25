@@ -44,15 +44,17 @@ You need to set active profile as `local` and set these environment variables:
 Then, go to: `src/test/resources/infrastructure` folder, execute following command in the terminal: `docker compose up` 
 (which will create a docker container with postgres database) and run the Spring application.
 
-To fully test the application, you need to connect to a database (via Database tab in IntelliJ Ultimate, terminal or 
-any other tool of your choice). Use below credentials:
+To see what endpoints are available to you, open `http://localhost:8080/swagger-ui/index.html` in the browser. 
+
+To fully test the application, you need test data. Connect to a database (via Database tab in IntelliJ Ultimate, terminal or 
+any other tool of your choice) by using below credentials:
 ```
 url: jdbc:postgresql://localhost:5432/fourthwall_assignment
 user: fourthwall_assignment
 password: fourthwall_assignment
 ```
 
-Now, insert some movies as you need data to work with:
+and insert some movies:
 ```postgresql
 insert into movies values (gen_random_uuid(), 'tt0232500', 'The Fast and the Furious');
 insert into movies values (gen_random_uuid(), 'tt0322259', '2 Fast 2 Furious');
@@ -64,8 +66,6 @@ insert into movies values (gen_random_uuid(), 'tt2820852', 'Furious 7');
 insert into movies values (gen_random_uuid(), 'tt4630562', 'The Fate of the Furious');
 insert into movies values (gen_random_uuid(), 'tt5433138', 'F9: The Fast Saga');
 ```
-
-Application is ready for testing!
 
 ### Testing internal endpoints
 
@@ -87,7 +87,7 @@ This call will return a token (which is valid for 5 minutes by default) which yo
 an authorization header (`-H 'Authorization: Bearer <token>'`), which will allow you to access secured endpoints. Request example:
 ```shell
 curl -X POST -H 'Content-Type: application/json' \
--H 'Authorization: Bearer ' \
+-H 'Authorization: Bearer <token>' \
 -d '{
     "movieId": "<uuid>",
     "startsAt": "2024-11-25T20:00:00+00:00",
